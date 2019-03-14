@@ -21,9 +21,16 @@
     <script type="text/babel">
 
         const { Component } = React
-        const { compose, lifecycle } = Recompose
+        const { compose, lifecycle, withState } = Recompose
 
         class App extends Component {
+
+            componentDidMount() {
+                console.log('componentDidMount', this)
+
+                setTimeout(_ => this.props.flagToggle(false), 1000);
+
+            }
 
             render() {
                 return (
@@ -31,12 +38,17 @@
 
                     <h1>react recompose exam</h1>
 
+                    <h1>
+                        { this.props.toggle ? 'on' : 'off' }
+                    </h1>
+
                 </div>
                 )
             }
         }
 
         const Index = compose(
+            withState('toggle', 'flagToggle', true),
             lifecycle({
                 componentDidMount() {
 
