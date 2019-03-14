@@ -21,6 +21,7 @@
     <script type="text/babel">
 
         const { Component } = React
+        const { compose, lifecycle } = Recompose
 
         class App extends Component {
 
@@ -35,7 +36,17 @@
             }
         }
 
-        ReactDOM.render(<App />, document.getElementById('root'))
+        const Index = compose(
+            lifecycle({
+                componentDidMount() {
+
+                    console.log('recompose - lifecycle - componentDidMount', this)
+
+                }
+            })
+        )(App)
+
+        ReactDOM.render(<Index />, document.getElementById('root'))
 
     </script>
 </body>
