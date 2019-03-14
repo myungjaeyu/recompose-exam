@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>recompose-renderComponent-exam</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://unpkg.com/react@16.8.4/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16.8.4/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/recompose@0.30.0/dist/Recompose.umd.js"></script>
+
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <script>console.log('version', React.version)</script>
+
+    <script type="text/babel">
+
+        const { Component } = React
+        const { compose, withState, branch, renderComponent, lifecycle } = Recompose
+
+
+        const Loading = () => 
+            <div>
+               <h1>로딩 중...</h1>
+            </div>
+
+
+        const withLayout = branch(
+            ({ loading }) => loading,
+            renderComponent(Loading)
+        )
+
+
+        const Main = () => <div>: )</div>
+        const Layout = withLayout(Main)
+
+    /* ------------------------------------------------------------ */
+
+        class App extends Component {
+
+            render() {
+                return (
+                <div className='App'>
+                    <h1>recompose renderComponent exam</h1>
+
+                    <Layout loading={ this.props.toggle }/>
+
+                </div>
+                )
+            }
+        }
+
+        const Index = compose(
+            withState('toggle', 'flagToggle', true),
+            lifecycle({
+                componentDidMount() {
+
+                    setTimeout(_ => this.props.flagToggle(false), 2000)
+
+                }  
+            })
+        )(App)
+
+        ReactDOM.render(<Index />, document.getElementById('root'))
+
+    </script>
+</body>
+
+</html> 
