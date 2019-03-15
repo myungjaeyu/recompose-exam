@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>recompose-withReducer-exam</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://unpkg.com/react@16.8.4/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16.8.4/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/recompose@0.30.0/dist/Recompose.umd.js"></script>
+
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <script>console.log('version', React.version)</script>
+
+    <script type="text/babel">
+
+        const { Component } = React
+        const { withReducer } = Recompose
+
+        const ACTION_TOGGLE = '[Action] FlagToggle'
+
+        class App extends Component {
+
+            componentDidMount() {
+                console.log('componentDidMount', this)
+
+                setTimeout(_ => this.props.toggleDispatch(ACTION_TOGGLE), 1000)
+
+            }
+
+            render() {
+                return (
+                <div className='App'>
+                    <h1>recompose withReducer exam</h1>
+                    <h1>{ this.props.toggleState.toggle ? 'on' : 'off' }</h1>
+
+                    <button onClick = { () => this.props.toggleDispatch(ACTION_TOGGLE) } >toggle</button>
+
+                </div>
+                )
+            }
+        }
+
+        const Index = withReducer(
+            'toggleState',
+            'toggleDispatch',
+            (state, action) => {
+                switch (action) {
+                    case ACTION_TOGGLE :
+
+                        return { toggle : !state.toggle }
+
+                    default: return state
+                }
+            },
+            {
+                toggle : true
+            }
+        )(App)
+
+        ReactDOM.render(<Index />, document.getElementById('root'))
+
+    </script>
+</body>
+
+</html> 
